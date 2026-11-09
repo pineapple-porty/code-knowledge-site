@@ -1,0 +1,8 @@
+{
+  "name": "code-knowledge-site",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": { "dev": "next dev", "prebuild": "node scripts/copy-runtimes.mjs", "build": "next build", "start": "next start", "lint": "next lint" },
+  "dependencies": { "next": "15.5.3", "pyodide": "0.28.2", "react": "19.1.1", "react-dom": "19.1.1", "wasmoon": "1.16.0" },
+  "devDependencies": { "@types/node": "^22.15.30", "@types/react": "^19.1.8", "@types/react-dom": "^19.1.7", "typescript": "^5.8.3" }
+}

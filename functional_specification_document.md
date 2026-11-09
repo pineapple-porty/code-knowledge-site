@@ -22,7 +22,7 @@ This document serves as the master specification and prompt reference for buildi
 | **Framework** | Next.js (App Router) | Configured for pure Static Site Generation (`output: 'export'`). Generates zero-backend HTML/CSS/JS bundles. |
 | **Styling** | Plain CSS (`globals.css`) | Custom CSS variables for theme switching, zero framework overhead, fast rendering, strict typography grids. |
 | **Python Runtime** | Pyodide (WASM) | CPython 3.12+ compiled to WebAssembly. Runs offline in dedicated browser Web Workers. |
-| **Lua Runtime** | Fengari (WASM/JS) | Lua 5.3+ virtual machine compiled to JS/WASM. Runs offline in dedicated browser Web Workers. |
+| **Lua Runtime** | Wasmoon (WebAssembly) | official Lua 5.4 source compiled to WebAssembly with JavaScript bindings. Runs offline in dedicated browser Web Workers. |
 | **Content Authoring** | Raw HTML & Modular Components | Simple, direct page construction without complex dynamic CMS overhead or database bloat. |
 | **AI Content Pipeline** | Google AI Studio (Gemini 1.5 Pro) | Used offline during authoring to pre-compute JSON datasets detailing bytecode, syntax tooltips, and compiler notes. |
 | **Deployment / CDN** | Vercel / Cloudflare Pages / GitHub Pages | Static edge hosting with automatic continuous integration deployments triggered via Git commits. |
@@ -48,7 +48,7 @@ To ensure infinite loops or memory-intensive execution in user scripts never fre
 │ Web Worker Thread (/public/wasm/workers/)                              │
 │                                                                        │
 │  ├── Pyodide Worker (Python 3.12+ WASM Runtime)                        │
-│  └── Fengari Worker (Lua 5.3+ VM Runtime)                              │
+│  └── Wasmoon Worker (Lua 5.4 VM Runtime)                              │
 │  └── Enforces step count / memory ceilings to safely terminate loops   │
 └────────────────────────────────────────────────────────────────────────┘
 ```
@@ -106,7 +106,7 @@ Rather than requesting explanations via dynamic API calls at runtime (which caus
 ### Phase 1: Infrastructure Setup
 * Initialize Next.js project with static export configuration (`output: 'export'`).
 * Create `/src/app/globals.css` with CSS variables for dark/light themes and monospace font scales.
-* Download and place Pyodide and Fengari browser dependencies into `/public/wasm/`.
+* Download and place Pyodide and Wasmoon browser dependencies into `/public/wasm/`.
 
 ### Phase 2: Static Templates & Design System
 * Build baseline navigation header, footer, and responsive content drawers.
