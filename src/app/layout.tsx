@@ -3,8 +3,8 @@ import type { ReactNode } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Runtime Notes — Learn how languages work",
-  description: "A hands-on field guide to Python and Lua runtimes, bytecode, and memory.",
+  title: "Runtime Notes — Software curiosities",
+  description: "A personal hobby wiki collecting interesting details about Python, Lua, bytecode, and runtimes.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {

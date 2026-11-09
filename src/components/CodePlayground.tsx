@@ -28,7 +28,7 @@ export default function CodePlayground({ language, initialCode }: Props) {
       worker.onmessage = (event: MessageEvent<{ output?: string; error?: string }>) => {
         if (timerRef.current) clearTimeout(timerRef.current);
         worker.terminate(); workerRef.current = null;
-        setOutput(event.data.output || event.data.error || "Finished with no output.");
+        setOutput([event.data.output, event.data.error].filter(Boolean).join("\n") || "Finished with no output.");
         setState(event.data.error ? "error" : "done");
       };
       worker.onerror = (event) => {

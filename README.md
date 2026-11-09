@@ -1,23 +1,21 @@
 # Runtime Notes
 
-A static, browser-first field guide to Python and Lua internals. The application is built with Next.js static export; there is no application server or code-execution API.
+A personal hobby wiki for Python and Lua internals: language details, compiler quirks, and runtime behavior worth collecting. It is not a course and has no lesson progression or learning goals.
 
-## Run locally
+## Local development
 
-- Install Node.js 20 or newer.
-- Run npm install.
-- Run npm run dev and open the local URL printed by Next.js.
-- Run npm run build to create the static site in out/.
+Use Node.js 20.9 or newer. Install dependencies with npm install, then run npm run dev. The predev script copies the local Wasmoon and Pyodide distributions into public/.
 
-The build pre-step copies Wasmoon and Pyodide runtime assets from the installed packages into public/. These files are generated and should not be committed. Runtime execution happens in disposable Web Workers. The UI can stop a run by terminating its worker; this keeps the page responsive but is not a strict memory quota or a security boundary.
+Run npm run typecheck for the TypeScript check. Run npm run build for the static export in out/. Host out/ with a static web server; next start is not used for exported sites.
 
-## Runtime versions
+## Browser runtimes
 
-- Lua 5.4: Wasmoon, the official Lua VM compiled to WebAssembly.
-- Python: Pyodide, CPython compiled to WebAssembly.
+Lua 5.4 uses Wasmoon: official Lua compiled to WebAssembly. Python uses Pyodide: CPython compiled to WebAssembly. Both optional demos execute in disposable browser workers. The parent page terminates a run after its timeout; this is not a strict memory quota or a security guarantee.
 
-The service worker caches the site and same-origin assets as they are requested. A first visit needs a network connection to download the runtimes; revisit after they finish loading for offline use.
+Runtime assets are staged from npm packages and ignored by Git. There is no execution backend or runtime AI API. The initial visit requires a connection, and the service worker caches requested same-origin resources. Offline behavior has not yet been verified.
 
-## Current scope
+## Draft status
 
-This first slice includes three authored lessons per language, searchable lesson navigation, theme switching, local code execution, output/error display, and an offline cache. Instruction notes are educational summaries, not byte-for-byte disassembly for every interpreter build. Exact bytecode introspection and broader lesson coverage remain to be built.
+This first draft contains six topic entries, topic search, dark/light themes, optional editable demos, implementation notes, and a static-export configuration. Exact instruction listings are illustrative, not live disassemblies.
+
+Production build and browser verification are pending: the verification sandbox killed dependency installs and subsequently timed out even when starting node --version. No deployment has been made.

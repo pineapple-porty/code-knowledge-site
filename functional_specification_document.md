@@ -1,12 +1,16 @@
 # SYSTEM PROMPT & SPECIFICATION DOCUMENT
-## Project: Python & Lua Compiler & Language Exploration Platform
+## Project: Runtime Notes — Personal Python & Lua Wiki
 
 ---
+
+## Product framing
+
+This is a personal hobby website showing topics the owner finds interesting, not a course or teaching product. Organize it as a browseable wiki with topic articles and optional code demonstrations. Do not add lesson progression, learning goals, or course framing.
 
 ## 1. Project Overview & System Context
 
 ### 1.1 Purpose
-This document serves as the master specification and prompt reference for building a lightweight, ultra-performant, developer-focused educational platform dedicated to **Python** and **Lua**. The platform focuses on low-level language concepts, including compiler mechanics, virtual machine runtimes (CPython VM and Lua VM), bytecode instruction sets, memory management models, execution paradigms, and standard library architectures.
+This document serves as the master specification and prompt reference for building a lightweight, ultra-performant, personal-interest hobby wiki dedicated to **Python** and **Lua**. The platform focuses on low-level language concepts, including compiler mechanics, virtual machine runtimes (CPython VM and Lua VM), bytecode instruction sets, memory management models, execution paradigms, and standard library architectures.
 
 ### 1.2 Core Pillars
 1. **Minimalist Aesthetic:** High readability, plain CSS styling, zero visual bloat, dark/light theme options, and optimized typographic hierarchy for reading code and technical documentation.
@@ -79,7 +83,7 @@ Rather than requesting explanations via dynamic API calls at runtime (which caus
 ┌────────────────────────────────────────────────────────┐
 │ Static Production Bundle (Zero Runtime API Cost)        │
 │                                                        │
-│  ├── Static HTML/CSS Lesson Pages                      │
+│  ├── Static HTML/CSS Topic Pages                      │
 │  ├── Instant Local Bytecode Tooltips & Sidebars        │
 │  └── Isolated Offline WASM Execution                   │
 └────────────────────────────────────────────────────────┘
@@ -88,7 +92,7 @@ Rather than requesting explanations via dynamic API calls at runtime (which caus
 ### 4.2 Standard Explanation JSON Schema
 ```json
 {
-  "lesson_id": "lua-table-mechanics",
+  "topic_id": "lua-table-mechanics",
   "language": "lua",
   "topic": "Array vs Hash Partitions",
   "opcodes": {
@@ -110,7 +114,7 @@ Rather than requesting explanations via dynamic API calls at runtime (which caus
 
 ### Phase 2: Static Templates & Design System
 * Build baseline navigation header, footer, and responsive content drawers.
-* Create standardized HTML/CSS lesson containers for Python and Lua content.
+* Create standardized HTML/CSS topic containers for Python and Lua content.
 * Build code snippet UI components with line numbers, copy actions, and execution buttons.
 
 ### Phase 3: WebAssembly Integration & Explanation Panels
