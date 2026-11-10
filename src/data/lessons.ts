@@ -1,4 +1,4 @@
-export type Language = "python" | "lua";
+export type Language = "python" | "lua" | "bash" | "ruby";
 export type Topic = {
   id: string; title: string; eyebrow: string; description: string; code: string;
   concepts: { title: string; text: string }[];
@@ -123,6 +123,112 @@ export const topics: Record<Language, Topic[]> = {
         { opcode: "SETFIELD", meaning: "Store a named field, creating an object reference." },
         { opcode: "RETURN", meaning: "Return from the function; local references leave scope." },
       ],
+    },
+  ],
+  bash: [
+    {
+      id: "bash-expansion",
+      title: "Expansion before execution",
+      eyebrow: "SHELL SYNTAX",
+      description: "Bash expands parts of a command line before it runs the command. Parameter expansion substitutes values, while quoting controls whether the resulting text is split into separate words. That is why \"$name\" is usually safer than an unquoted $name when a value may contain spaces. The shell then passes the resulting words as arguments to the program.",
+      sources: [
+        { label: "Shell expansions", url: "https://www.gnu.org/software/bash/manual/bash.html#Shell-Expansions" },
+        { label: "Quoting", url: "https://www.gnu.org/software/bash/manual/bash.html#Quoting" },
+      ],
+      code: "name=\"Ada Lovelace\"\nprintf 'Hello, %s\\n' \"$name\"",
+      concepts: [
+        { title: "Parameters become text", text: "The shell replaces a parameter expansion such as $name with its current value before command execution." },
+        { title: "Quotes preserve boundaries", text: "Double quotes prevent word splitting and filename expansion on the text inside them, while still allowing parameter expansion." },
+        { title: "Commands receive arguments", text: "After expansions and quote removal, Bash invokes a command with its resulting words as arguments." },
+      ],
+      runtime: [],
+    },
+    {
+      id: "bash-pipelines",
+      title: "Pipelines connect small commands",
+      eyebrow: "COMMAND FLOW",
+      description: "A Bash pipeline connects the standard output of one command to the standard input of the next. Each command can focus on a small transformation, such as filtering lines or counting them. Bash normally runs the commands in a pipeline as separate processes. The pipeline's final status usually comes from its last command unless the pipefail option is enabled.",
+      sources: [
+        { label: "Pipelines", url: "https://www.gnu.org/software/bash/manual/bash.html#Pipelines" },
+        { label: "The set builtin", url: "https://www.gnu.org/software/bash/manual/bash.html#The-Set-Builtin" },
+      ],
+      code: "printf '%s\\n' alpha beta gamma | grep 'a' | wc -l",
+      concepts: [
+        { title: "Text moves through streams", text: "The vertical bar connects one process's standard output to the next process's standard input." },
+        { title: "Each command transforms data", text: "A pipeline combines ordinary commands without requiring one large program to perform every step." },
+        { title: "Status has rules", text: "By default, a pipeline's status follows its last command; pipefail changes this behavior when an earlier command fails." },
+      ],
+      runtime: [],
+    },
+    {
+      id: "bash-functions",
+      title: "Functions package a workflow",
+      eyebrow: "AUTOMATION",
+      description: "A Bash function gives a name to a group of shell commands so that the group can be reused. Its positional parameters are available as $1, $2, and so on, just like arguments to a script. Variables declared with local are limited to the function's dynamic scope. Functions make repeated shell tasks easier to read and compose.",
+      sources: [
+        { label: "Shell functions", url: "https://www.gnu.org/software/bash/manual/bash.html#Shell-Functions" },
+        { label: "Shell parameters", url: "https://www.gnu.org/software/bash/manual/bash.html#Shell-Parameters" },
+      ],
+      code: "greet() {\n  local name=${1:-friend}\n  printf 'Hello, %s\\n' \"$name\"\n}\n\ngreet \"Ada\"",
+      concepts: [
+        { title: "Arguments are positional", text: "A function receives its arguments through numbered positional parameters such as $1." },
+        { title: "Local variables stay scoped", text: "The local builtin limits a variable's visibility to a function and its dynamically nested calls." },
+        { title: "Functions fit into scripts", text: "Named command groups can be reused throughout a shell script or interactive session." },
+      ],
+      runtime: [],
+    },
+  ],
+  ruby: [
+    {
+      id: "ruby-objects",
+      title: "Objects, messages, and methods",
+      eyebrow: "OBJECT MODEL",
+      description: "Ruby organizes values as objects, and a method call asks a receiver to perform an operation. When no receiver is written explicitly, self is used. The receiver's class and its ancestors participate in finding the method. This message-oriented model lets scripts combine simple objects and reusable behavior with concise syntax.",
+      sources: [
+        { label: "Calling methods", url: "https://docs.ruby-lang.org/en/3.4/syntax/calling_methods_rdoc.html" },
+        { label: "Object class", url: "https://docs.ruby-lang.org/en/3.4/Object.html" },
+      ],
+      code: "name = \"Ada\"\nmessage = \"Hello, #{name}\"\nputs message.upcase",
+      concepts: [
+        { title: "Every call has a receiver", text: "An explicit receiver appears before the method name; otherwise Ruby uses self." },
+        { title: "Methods return values", text: "The result of a method call can be assigned, passed to another method, or used in a larger expression." },
+        { title: "Calls can be chained", text: "A returned object can become the receiver of the next call in an expression." },
+      ],
+      runtime: [],
+    },
+    {
+      id: "ruby-blocks",
+      title: "Blocks carry behavior",
+      eyebrow: "ITERATION",
+      description: "A Ruby block is a piece of code associated with a method call. A method can run the block with yield, optionally passing values that become block parameters. Enumerable methods such as map use blocks to describe what to do with each element. This lets a short script express repeated work without writing the iteration machinery itself.",
+      sources: [
+        { label: "Ruby methods and blocks", url: "https://docs.ruby-lang.org/en/3.4/syntax/methods_rdoc.html#label-Blocks" },
+        { label: "Enumerable", url: "https://docs.ruby-lang.org/en/3.4/Enumerable.html" },
+      ],
+      code: "numbers = [1, 2, 3, 4]\nsquares = numbers.map { |n| n * n }\nputs squares.join(\", \")",
+      concepts: [
+        { title: "A block belongs to a call", text: "Blocks are passed to methods using braces or do/end syntax." },
+        { title: "Yield runs the block", text: "A method can invoke its attached block with yield and pass it arguments." },
+        { title: "Enumerable builds on blocks", text: "Methods like map and select apply the supplied block to collection elements." },
+      ],
+      runtime: [],
+    },
+    {
+      id: "ruby-gc",
+      title: "Ruby's garbage collector",
+      eyebrow: "MEMORY",
+      description: "CRuby manages objects with a mark-and-sweep garbage collector. During a collection, it identifies objects that are still reachable and reclaims objects that are not. The collector also uses generations to treat recently created objects differently from long-lived ones. Ruby exposes controls and statistics through the GC module.",
+      sources: [
+        { label: "Ruby GC module", url: "https://docs.ruby-lang.org/en/3.4/GC.html" },
+        { label: "Ruby ObjectSpace", url: "https://docs.ruby-lang.org/en/3.4/ObjectSpace.html" },
+      ],
+      code: "items = Array.new(1_000) { |n| \"entry-#{n}\" }\nputs GC.stat(:heap_live_slots)\nitems = nil",
+      concepts: [
+        { title: "Reachable objects stay live", text: "The collector follows references from program roots to determine which objects remain in use." },
+        { title: "Generations group lifetimes", text: "Generational collection handles young and old objects differently to reduce collection work." },
+        { title: "Collection timing is automatic", text: "Dropping a reference makes an object eligible for collection but does not promise when collection occurs." },
+      ],
+      runtime: [],
     },
   ],
 };

@@ -3,6 +3,7 @@ node_modules/
 out/
 public/pyodide/
 public/wasm/
+public/ruby/
 .DS_Store
 *.tsbuildinfo
 

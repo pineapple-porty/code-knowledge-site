@@ -1,4 +1,4 @@
-const CACHE_NAME = "runtime-notes-v1";
+const CACHE_NAME = "runtime-notes-v2";
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(["/"])).then(() => self.skipWaiting()));
 });
