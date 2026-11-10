@@ -1,6 +1,8 @@
 node_modules/
 .next/
 out/
+public/pyodide/
+public/wasm/
 .DS_Store
 *.tsbuildinfo
 

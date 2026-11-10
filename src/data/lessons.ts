@@ -3,13 +3,18 @@ export type Topic = {
   id: string; title: string; eyebrow: string; description: string; code: string;
   concepts: { title: string; text: string }[];
   runtime: { opcode: string; meaning: string }[];
+  sources: { label: string; url: string }[];
 };
 
 export const topics: Record<Language, Topic[]> = {
   python: [
     {
       id: "bytecode-first-look", title: "A first look at bytecode", eyebrow: "COMPILER",
-      description: "A single Python expression passes through a compiler before the virtual machine sees it. Code objects are one of the neat ideas hiding in that trip.",
+      description: "CPython compiles each code block into a code object before the evaluation loop executes it. A code object holds the compiled instruction stream and related metadata, including constants and names. The dis module can display the interpreter's bytecode in a readable form. That bytecode is a CPython implementation detail and can change between releases.",
+      sources: [
+        { label: "CPython bytecode", url: "https://docs.python.org/3/library/dis.html" },
+        { label: "Code objects", url: "https://docs.python.org/3/c-api/code.html" },
+      ],
       code: "value = 6 * 7\nprint(value)",
       concepts: [
         { title: "Compile, then evaluate", text: "CPython compiles source to code objects before the evaluation loop runs. The exact instruction sequence can change across Python versions." },
@@ -24,7 +29,11 @@ export const topics: Record<Language, Topic[]> = {
     },
     {
       id: "frames-and-locals", title: "Frames, locals, and scope", eyebrow: "EXECUTION MODEL",
-      description: "Each function call gets its own little execution frame: local values, a place to keep temporary results, and a pointer to the next instruction.",
+      description: "Python code executes in blocks such as modules, function bodies, and class definitions. Each running block has an execution frame that records its state and connects it to the previous frame. Function-local names follow Python's scope rules, while global and built-in names use separate namespaces. When a function returns, execution resumes in its caller.",
+      sources: [
+        { label: "Execution model", url: "https://docs.python.org/3/reference/executionmodel.html" },
+        { label: "Frame objects", url: "https://docs.python.org/3/reference/datamodel.html#frame-objects" },
+      ],
       code: "def greet(name):\n    message = f\"Hello, {name}\"\n    return message\n\nprint(greet(\"Ada\"))",
       concepts: [
         { title: "A call creates a frame", text: "A frame tracks the code being evaluated, its local storage, the current instruction, and the value stack." },
@@ -39,7 +48,11 @@ export const topics: Record<Language, Topic[]> = {
     },
     {
       id: "reference-counting", title: "Reference counting & GC", eyebrow: "MEMORY",
-      description: "CPython has two memory-management tricks working together: reference counts for the everyday cases, and a collector that can untangle cycles.",
+      description: "CPython tracks references to objects using reference counts. Reference counting alone cannot reclaim an unreachable cycle when its objects continue to refer to one another. Python's cyclic garbage collector supplements reference counting by finding cycles among tracked containers. The gc module provides controls and inspection tools for that collector.",
+      sources: [
+        { label: "Reference counting", url: "https://docs.python.org/3/c-api/refcounting.html" },
+        { label: "Garbage collector", url: "https://docs.python.org/3/library/gc.html" },
+      ],
       code: "class Node:\n    def __init__(self):\n        self.next = None\n\na = Node()\nb = Node()\na.next = b\nb.next = a",
       concepts: [
         { title: "References keep objects alive", text: "In CPython, an object's reference count tracks the references currently pointing to it." },
@@ -56,7 +69,11 @@ export const topics: Record<Language, Topic[]> = {
   lua: [
     {
       id: "lua-tables", title: "What a Lua table really is", eyebrow: "DATA STRUCTURES",
-      description: "Lua tables do a surprising amount of work. A single structure can behave like an array, a dictionary, or an object, depending on how you use it.",
+      description: "Tables are Lua's principal data structure and can represent sequences, mappings, or records. In Lua 5.4's implementation, elements are kept in array and hash parts chosen according to the keys and contents. A missing key evaluates to nil, and assigning nil removes that key. The length operator has special rules for sequences with holes, so it is not always a count of every table entry.",
+      sources: [
+        { label: "Lua 5.4 manual", url: "https://www.lua.org/manual/5.4/manual.html#2.1" },
+        { label: "Table implementation", url: "https://www.lua.org/source/5.4/ltable.c.html" },
+      ],
       code: "local player = {\n  name = \"Mira\",\n  score = 42,\n}\n\nplayer.inventory = { \"map\", \"key\" }\nprint(player.name, player.score)",
       concepts: [
         { title: "One type, two parts", text: "Lua tables use an array part for suitable positive integer keys and a hash part for other keys. The VM chooses sizes based on the table's contents." },
@@ -71,7 +88,11 @@ export const topics: Record<Language, Topic[]> = {
     },
     {
       id: "lua-bytecode", title: "From Lua source to instructions", eyebrow: "COMPILER",
-      description: "Lua 5.4 uses a register-based virtual machine. That choice gives its bytecode a very different feel from a stack-based interpreter.",
+      description: "Lua compiles source into bytecode before its virtual machine executes it. Lua 5.4 uses a register-based VM, so instructions refer to virtual registers rather than relying on an operand stack. The luac utility can save compiled chunks, mainly to speed loading and check syntax offline; precompiling does not make a chunk execute faster. The bytecode format is specific to Lua versions and is not a portable interchange format.",
+      sources: [
+        { label: "Lua 5.4 manual", url: "https://www.lua.org/manual/5.4/" },
+        { label: "luac compiler", url: "https://www.lua.org/manual/5.4/luac.html" },
+      ],
       code: "local function area(width, height)\n  return width * height\nend\n\nprint(area(8, 5))",
       concepts: [
         { title: "Registers, not an operand stack", text: "Lua 5.4 bytecode uses virtual registers. Instructions name the registers they read and write." },
@@ -86,7 +107,11 @@ export const topics: Record<Language, Topic[]> = {
     },
     {
       id: "lua-gc", title: "Lua's garbage collector", eyebrow: "MEMORY",
-      description: "Lua uses a tracing garbage collector, with incremental and generational modes. Cycles are ordinary: what matters is whether anything can still reach them.",
+      description: "Lua manages memory automatically and reclaims objects that can no longer be reached during normal execution. Its 5.4 collector supports incremental and generational modes. Incremental collection spreads mark-and-sweep work across steps; generational mode checks newer objects frequently and can later run a major pass over all objects. An unreachable cycle can be collected even when its objects refer to one another.",
+      sources: [
+        { label: "Incremental collection", url: "https://www.lua.org/manual/5.4/manual.html#2.5.1" },
+        { label: "Generational collection", url: "https://www.lua.org/manual/5.4/manual.html#2.5.2" },
+      ],
       code: "local function make_pair()\n  local left = {}\n  local right = {}\n  left.peer = right\n  right.peer = left\n  return left\nend\n\nlocal pair = make_pair()\npair = nil -- now unreachable",
       concepts: [
         { title: "Tracing from roots", text: "The collector follows references from roots such as the stack and globals to find live objects." },
