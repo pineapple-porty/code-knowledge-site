@@ -54,6 +54,14 @@ export default function KnowledgeSite() {
             <div className="article-heading"><div><div className="article-eyebrow">{topic.eyebrow}<span className="eyebrow-divider">/</span>{language === "lua" ? "LUA 5.4" : "CPYTHON"}</div><h2>{topic.title}<span className="title-period">.</span></h2></div></div>
             {isCompilerTopic && <CompilerDiagram language={language} />}
             <p className={"lesson-description" + (isCompilerTopic ? " lesson-description-featured" : "")}>{topic.description}</p>
+            <nav className="topic-sources" aria-label={`Sources for ${topic.title}`}>
+              <span>Sources</span>
+              {topic.sources.map((source) => (
+                <a key={source.url} href={source.url} target="_blank" rel="noreferrer">
+                  {source.label}<span aria-hidden="true"> ↗</span>
+                </a>
+              ))}
+            </nav>
             <div className="section-rule"><span>✳</span><span>A LITTLE EXAMPLE</span><button onClick={copyCode}>{copied ? "Copied ✓" : "Copy snippet ↗"}</button></div>
             <CodePlayground key={language + "-" + topic.id} language={language} initialCode={topic.code} />
             {!isCompilerTopic && <section className="concept-section"><div className="section-rule"><span>✳</span><span>WHAT MAKES IT INTERESTING</span><span className="section-rule-tail">A FEW DETAILS</span></div><div className="concept-grid">{topic.concepts.map((concept, index) => <div className="concept-card" key={concept.title}><span className="concept-number">✳ {String(index + 1).padStart(2, "0")}</span><h3>{concept.title}</h3><p>{concept.text}</p></div>)}</div></section>}
