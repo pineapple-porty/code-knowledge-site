@@ -1,0 +1,9 @@
+node_modules/
+.next/
+out/
+.DS_Store
+*.tsbuildinfo
+
+# Generated browser runtime distributions
+/public/wasm/
+/public/pyodide/
