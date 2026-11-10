@@ -16,6 +16,6 @@ Runtime assets are staged from npm packages and ignored by Git. There is no exec
 
 ## Draft status
 
-The wiki contains twelve topic entries, compiler diagrams, sourced summaries, topic search, dark/light themes, and local examples for the supported browser runtimes. Exact instruction listings are illustrative, not live disassemblies.
+The wiki contains thirteen topic entries, compiler diagrams, sourced summaries, topic search, dark/light themes, and local examples for the supported browser runtimes. Bash entries explain command interpretation and compare related shells; Bash snippets remain reference-only. Exact instruction listings are illustrative, not live disassemblies.
 
 The site is configured for static export to out/. No deployment has been made.
