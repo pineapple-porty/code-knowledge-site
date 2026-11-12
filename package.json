@@ -3,18 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "node scripts/copy-runtimes.mjs && next dev --hostname 0.0.0.0",
-    "build": "node scripts/copy-runtimes.mjs && next build",
+    "dev": "next dev --hostname 0.0.0.0 --port \"$PORT\"",
+    "build": "next build",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@ruby/3.4-wasm-wasi": "2.10.1",
-    "@ruby/wasm-wasi": "2.10.1",
     "next": "15.5.29",
-    "pyodide": "0.28.2",
     "react": "19.1.1",
-    "react-dom": "19.1.1",
-    "wasmoon": "1.16.0"
+    "react-dom": "19.1.1"
   },
   "devDependencies": {
     "@types/node": "^22.15.30",
